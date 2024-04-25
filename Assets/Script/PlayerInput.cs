@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -13,8 +14,13 @@ public class PlayerInput : MonoBehaviour
     public bool fire {  get; private set; }
 
 
-    void Update()
+    private void Update()
     {
+        if (GameManager.instance != null && GameManager.instance.isGameOver)
+        {
+            fire = false;
+            return;
+        }
         vMove = Input.GetAxis(verticalInput);
         hMove = Input.GetAxis(horizontaInput);
         fire = Input.GetButton(fireButtonName);
