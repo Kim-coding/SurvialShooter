@@ -58,6 +58,7 @@ public class Gun : MonoBehaviour
                 {
                     damagable.OnDamage(damage,hitPoint,hitInfo.normal);
                 }
+                
             }
             else
             {

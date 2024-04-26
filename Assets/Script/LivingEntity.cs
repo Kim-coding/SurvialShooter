@@ -27,12 +27,13 @@ public class LivingEntity : MonoBehaviour, IDamageable
         health -= damage;
         if(health <= 0)
         {
-            onDie();
+            health = 0;
+            OnDie();
         }
         ApplyUpdateHealth(health,dead);
     }
 
-    public virtual void onDie()
+    public virtual void OnDie()
     {
         dead = true;
     }

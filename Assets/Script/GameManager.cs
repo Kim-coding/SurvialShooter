@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private int score = 0;
+    public int score = 0;
     public bool isGameOver { get; private set; }
-    private static GameManager singletonInstance;
+    
 
     public static GameManager instance
     {
@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private static GameManager singletonInstance;
+    
     public void Awake()
     {
         if(instance != null) 
@@ -41,10 +43,9 @@ public class GameManager : MonoBehaviour
     {
         if (!isGameOver)
         {
-            
             score += newScore;
-            
-            //UIManager.instance.UpdateScoreText(score);
+            Debug.Log(score);
+            UIManager.instance.UpdateScore(score);
         }
     }
 

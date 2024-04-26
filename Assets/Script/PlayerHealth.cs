@@ -37,14 +37,6 @@ public class PlayerHealth : LivingEntity
         //gun.enabled = true;
     }
 
-    void Update()
-    {
-        if(Input.GetKeyUp(KeyCode.Space)) 
-        {
-           
-        }
-    }
-
     public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
     {
         if(dead) return;
@@ -55,16 +47,19 @@ public class PlayerHealth : LivingEntity
         playerAudioPlayer.PlayOneShot(hitClip);
     }
 
-    public override void onDie()
+    public override void OnDie()
     {
-        base.onDie();
+        base.OnDie();
 
         playerAnimator.SetTrigger("Death");
 
         playerMovement.enabled = false;
         //gun.enabled = false;
+    }
 
-        Invoke("ReSpawn",5f);
+    void RestartLevel()
+    {
+        Invoke("ReSpawn", 5f);
     }
 
     public void ReSpawn()

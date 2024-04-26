@@ -1,14 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class Monster : LivingEntity
 {
     public LayerMask target;
-
+    
     public ParticleSystem hitEffect;
     public AudioClip hitSound;
     public AudioClip deathSound;
@@ -33,6 +31,15 @@ public class Monster : LivingEntity
             }
             return false;
         }
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        nav.enabled = true;
+        gameObject.GetComponent<BoxCollider>().enabled = true;
+        gameObject.GetComponent<CapsuleCollider>().enabled = true;
+        StartCoroutine(UdatePath());
     }
 
     private void Awake()
@@ -97,17 +104,14 @@ public class Monster : LivingEntity
     public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
     {
         base.OnDamage(damage, hitPoint, hitNormal);
-
-        hitEffect.transform.position = hitPoint;
-        hitEffect.transform.rotation = Quaternion.LookRotation(hitNormal);
+        
         hitEffect.Play();
-
         audioSource.PlayOneShot(hitSound);
     }
 
-    public override void onDie()
+    public override void OnDie()
     {
-        base.onDie();
+        base.OnDie();
         var cols = GetComponentsInChildren<Collider>();
         foreach (Collider col in cols)
         {
@@ -116,7 +120,9 @@ public class Monster : LivingEntity
 
         nav.isStopped = true;
         audioSource.PlayOneShot(deathSound);
+
         animator.SetTrigger("Death");
+        UIManager.instance.AddScore(10);
     }
 
     void StartSinking()
@@ -126,8 +132,19 @@ public class Monster : LivingEntity
 
     IEnumerator Sink()
     {
-        yield return new WaitForSeconds(2);
+        nav.enabled = false ;
 
-        Destroy(gameObject);
+        float speed = 0.5f;
+        float time = 2f;
+
+        float timer = 0;
+        while (timer < time)
+        {
+            transform.Translate(-Vector3.up * speed * Time.deltaTime);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        gameObject.SetActive(false);
     }
 }
