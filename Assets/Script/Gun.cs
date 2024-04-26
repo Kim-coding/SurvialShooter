@@ -56,13 +56,12 @@ public class Gun : MonoBehaviour
                 var damagable = hitInfo.collider.GetComponent<IDamageable>();
                 if (damagable != null)
                 {
-                    damagable.OnDamage(damage);
+                    damagable.OnDamage(damage,hitPoint,hitInfo.normal);
                 }
             }
             else
             {
                 hitPoint = firePoint.position + firePoint.forward * fireDistance;
-                //hitPoint는 레이의 끝지점
             }
             StartCoroutine(Effect(hitPoint));
 
@@ -73,13 +72,11 @@ public class Gun : MonoBehaviour
             bulletLine.SetPosition(0, firePoint.position);
             bulletLine.SetPosition(1, hitpoint);
 
-            Debug.Log(firePoint.position);
-            Debug.Log(hitpoint);
             bulletLine.enabled = true;
 
             fireEffect.Play();
 
-            yield return new WaitForSeconds(0.03f);
+            yield return new WaitForSeconds(0.05f);
 
             bulletLine.enabled = false;
         }

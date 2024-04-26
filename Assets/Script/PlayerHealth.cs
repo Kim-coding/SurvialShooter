@@ -37,24 +37,19 @@ public class PlayerHealth : LivingEntity
         //gun.enabled = true;
     }
 
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
         if(Input.GetKeyUp(KeyCode.Space)) 
         {
-            OnDamage(10);
+           
         }
     }
 
-    public override void OnDamage(float damage)
+    public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
     {
         if(dead) return;
 
-        base.OnDamage(damage);
+        base.OnDamage(damage, hitPoint, hitNormal);
 
         healthSlider.value = health;
         playerAudioPlayer.PlayOneShot(hitClip);

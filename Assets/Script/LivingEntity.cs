@@ -11,18 +11,25 @@ public class LivingEntity : MonoBehaviour, IDamageable
 
     protected virtual void OnEnable()
     {
-        
         dead = false;
         health = starthealth;
     }
 
-    public virtual void OnDamage(float damage)
+    public void ApplyUpdateHealth(float newHealth, bool newDead)
     {
+        health = newHealth;
+        dead = newDead;
+    }
+
+    public virtual void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
+    {
+
         health -= damage;
         if(health <= 0)
         {
             onDie();
         }
+        ApplyUpdateHealth(health,dead);
     }
 
     public virtual void onDie()
