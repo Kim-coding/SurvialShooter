@@ -1,9 +1,16 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public CinemachineVirtualCamera TPSCamera;
+    public CinemachineVirtualCamera FPSCamera;
+    public GameObject MiniMap;
+
+    private bool isTpsCamera = true;
+
     public float moveSpeed = 5f;
     public float rotateSpeed = 5f;
     
@@ -35,9 +42,34 @@ public class PlayerMovement : MonoBehaviour
             Vector3 hitPoint = ray.GetPoint(enter);
             Rotate(hitPoint);
         }
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            CameraChange();
+        }
+    }
+
+    private void CameraChange()
+    {
+        isTpsCamera = !isTpsCamera;
+        TPSCamera.gameObject.SetActive(isTpsCamera);
+        FPSCamera.gameObject.SetActive(!isTpsCamera);
+        MiniMap.SetActive(!isTpsCamera);
     }
 
     private void FixedUpdate()
+    {
+        if (isTpsCamera)
+        {
+            TpsCameraFixedUpdate();
+        }
+        else
+        {
+            FpsCameraFixedUpdate();
+        }
+    }
+
+    private void TpsCameraFixedUpdate()
     {
         h = playerInput.hMove;
         v = playerInput.vMove;
@@ -45,10 +77,28 @@ public class PlayerMovement : MonoBehaviour
         dir = new Vector3(h, 0f, v);
         if (dir.magnitude > 1f)
         {
-            dir.Normalize(); 
+            dir.Normalize();
         }
-        
-        if(dir.magnitude == 0f) 
+        AnimationPlay(dir);
+
+        Move();
+
+    }
+    private void FpsCameraFixedUpdate()
+    {
+        h = playerInput.hMove;
+        v = playerInput.vMove;
+
+        Vector3 dir = v * transform.forward + h * transform.right;
+        dir.Normalize();
+        AnimationPlay(dir);
+
+        Move(dir);
+    }
+
+    private void AnimationPlay(Vector3 dir)
+    {
+        if (dir.magnitude == 0f)
         {
             PlayerAnimator.SetBool(moved, false);
         }
@@ -56,13 +106,16 @@ public class PlayerMovement : MonoBehaviour
         {
             PlayerAnimator.SetBool(moved, true);
         }
-
-        Move();
-
     }
+
     private void Move()
     {
         rb.MovePosition(rb.position + dir * moveSpeed * Time.deltaTime);
+    }
+
+    private void Move(Vector3 direction)
+    {
+        rb.MovePosition(rb.position + direction * moveSpeed * Time.deltaTime);
     }
 
     private void Rotate(Vector3 hitPoint)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerHealth : LivingEntity
@@ -14,7 +15,7 @@ public class PlayerHealth : LivingEntity
     private Animator playerAnimator;
 
     private PlayerMovement playerMovement;
-    //private Gun gun;
+    private Gun gun;
 
     private void Awake()
     {
@@ -22,7 +23,7 @@ public class PlayerHealth : LivingEntity
         playerAnimator = GetComponent<Animator>();
 
         playerMovement = GetComponent<PlayerMovement>();
-        //gun = GetComponent<Gun>();
+        gun = GetComponentInChildren<Gun>();
     }
     
     protected override void OnEnable()
@@ -34,7 +35,7 @@ public class PlayerHealth : LivingEntity
         healthSlider.value = health;
 
         playerMovement.enabled = true;
-        //gun.enabled = true;
+        gun.enabled = true;
     }
 
     public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
@@ -54,12 +55,13 @@ public class PlayerHealth : LivingEntity
         playerAnimator.SetTrigger("Death");
 
         playerMovement.enabled = false;
-        //gun.enabled = false;
+        gun.enabled = false;
     }
 
     void RestartLevel()
     {
-        Invoke("ReSpawn", 5f);
+        SceneManager.LoadScene("Main");
+        //Invoke("ReSpawn", 5f);
     }
 
     public void ReSpawn()
