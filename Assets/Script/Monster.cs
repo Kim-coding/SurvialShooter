@@ -13,7 +13,6 @@ public class Monster : LivingEntity
 
     private LivingEntity targetEntity;
     private Animator animator;
-    private AudioSource audioSource;
 
     private NavMeshAgent nav;
     
@@ -45,7 +44,6 @@ public class Monster : LivingEntity
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        audioSource = GetComponent<AudioSource>();
         nav = GetComponent<NavMeshAgent>();
         targetEntity = GameObject.FindGameObjectWithTag("Player").GetComponent<LivingEntity>();
         
@@ -106,7 +104,8 @@ public class Monster : LivingEntity
         base.OnDamage(damage, hitPoint, hitNormal);
         
         hitEffect.Play();
-        audioSource.PlayOneShot(hitSound);
+
+        AudioManager.instance.effectPlay(hitSound);
     }
 
     public override void OnDie()
@@ -119,10 +118,10 @@ public class Monster : LivingEntity
         }
 
         nav.isStopped = true;
-        audioSource.PlayOneShot(deathSound);
+        AudioManager.instance.effectPlay(deathSound);
 
         animator.SetTrigger("Death");
-        UIManager.instance.AddScore(10);
+        GameManager.instance.AddScore(10);
     }
 
     void StartSinking()

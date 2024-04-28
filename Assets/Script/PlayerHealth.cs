@@ -14,7 +14,6 @@ public class PlayerHealth : LivingEntity
     public AudioClip deathClip;
     public AudioClip hitClip;
 
-    private AudioSource playerAudioPlayer;
     private Animator playerAnimator;
 
     private PlayerMovement playerMovement;
@@ -22,7 +21,6 @@ public class PlayerHealth : LivingEntity
 
     private void Awake()
     {
-        playerAudioPlayer = GetComponent<AudioSource>();
         playerAnimator = GetComponent<Animator>();
 
         playerMovement = GetComponent<PlayerMovement>();
@@ -51,7 +49,7 @@ public class PlayerHealth : LivingEntity
         base.OnDamage(damage, hitPoint, hitNormal);
 
         healthSlider.value = health;
-        playerAudioPlayer.PlayOneShot(hitClip);
+        AudioManager.instance.effectPlay(hitClip);
     }
 
     public override void OnDie()
@@ -59,6 +57,7 @@ public class PlayerHealth : LivingEntity
         base.OnDie();
 
         playerAnimator.SetTrigger("Death");
+        AudioManager.instance.effectPlay(deathClip);
 
         playerMovement.enabled = false;
         gun.enabled = false;

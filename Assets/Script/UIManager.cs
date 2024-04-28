@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class UIManager : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
-    private int score = 0;
+    public Image option;
     public static UIManager instance
     {
         get
@@ -21,11 +22,36 @@ public class UIManager : MonoBehaviour
     }
 
     private static UIManager m_instance;
-
-    public void AddScore(int newscore)
+    private void Update()
     {
-        score += newscore;
-        UpdateScore(score);
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (Time.timeScale == 0f)
+            {
+                option.gameObject.SetActive(false);
+                Time.timeScale = 1f;
+            }
+            else
+            {
+                option.gameObject.SetActive(true);
+                Time.timeScale = 0f;
+            }
+        }
+    }
+
+    public void ReSume()
+    {
+        option.gameObject.SetActive(false);
+        Time.timeScale = 1f;
+    }
+
+    public void QuitGame()
+    {
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+        
+        #endif
+        Application.Quit();
     }
 
     public void UpdateScore(int newScore)

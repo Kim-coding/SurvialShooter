@@ -15,14 +15,12 @@ public class Gun : MonoBehaviour
 
     public PlayerInput playerInput;
     private LineRenderer bulletLine;
-    private AudioSource gunAudioPlayer;
 
 
     private void Awake()
     {
         playerInput = GetComponentInParent<PlayerInput>();
         bulletLine = GetComponent<LineRenderer>();
-        gunAudioPlayer = GetComponent<AudioSource>();
 
         bulletLine.enabled = false;
         bulletLine.positionCount = 2;
@@ -46,7 +44,7 @@ public class Gun : MonoBehaviour
         if (Time.time > lastFireTime + fireInterval)
         {
             lastFireTime = Time.time;
-            gunAudioPlayer.PlayOneShot(shotClip);
+            
 
             var hitPoint = Vector3.zero;
             var ray = new Ray(firePoint.position, firePoint.forward);
@@ -65,6 +63,8 @@ public class Gun : MonoBehaviour
                 hitPoint = firePoint.position + firePoint.forward * fireDistance;
             }
             StartCoroutine(Effect(hitPoint));
+
+            AudioManager.instance.effectPlay(shotClip);
 
         }
 
