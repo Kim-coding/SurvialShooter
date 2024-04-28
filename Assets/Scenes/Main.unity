@@ -470,6 +470,7 @@ MonoBehaviour:
   effectMixer: {fileID: 24100000, guid: 8434b04884c414ac6b468e10945685e6, type: 2}
   musicSlider: {fileID: 905650353}
   effectSlider: {fileID: 391045657}
+  soundOnOff: {fileID: 2029328611}
 --- !u!1 &165710644
 GameObject:
   m_ObjectHideFlags: 0
@@ -5358,7 +5359,19 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 155442018}
+        m_TargetAssemblyTypeName: SetVolum, Assembly-CSharp
+        m_MethodName: SetOnOff
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1 &2045703843
 GameObject:

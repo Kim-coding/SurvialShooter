@@ -9,11 +9,13 @@ public class SetVolum : MonoBehaviour
 
     public Slider musicSlider;
     public Slider effectSlider;
+    public Toggle soundOnOff;
 
     private void Start()
     {
         musicSlider.onValueChanged.AddListener(SetMasterVolume);
         effectSlider.onValueChanged.AddListener(SetEffectVolume);
+        soundOnOff.onValueChanged.AddListener(SetOnOff);
     }
 
     public void SetMasterVolume(float volume)
@@ -30,5 +32,19 @@ public class SetVolum : MonoBehaviour
             effectMixer.SetFloat("effectMaster", -80);
         else
             effectMixer.SetFloat("effectMaster", Mathf.Log10(volume) * 20);
+    }
+
+    public void SetOnOff(bool onOff)
+    {
+        if(onOff)
+        {
+            masterMixer.SetFloat("musicMaster", 0);
+            effectMixer.SetFloat("effectMaster", 0);
+        }
+        else
+        {
+            masterMixer.SetFloat("musicMaster", -80);
+            effectMixer.SetFloat("effectMaster", -80);
+        }
     }
 }
