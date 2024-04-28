@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerHealth : LivingEntity
 {
     public Slider healthSlider;
+    public Image gameOverImage;
+    public TextMeshProUGUI gameOverText;
 
     public AudioClip deathClip;
     public AudioClip hitClip;
@@ -34,6 +37,9 @@ public class PlayerHealth : LivingEntity
         healthSlider.maxValue = starthealth;
         healthSlider.value = health;
 
+        gameOverImage.color = new Color(gameOverImage.color.r,gameOverImage.color.g,gameOverImage.color.b,0);
+        gameOverText.color = new Color(gameOverText.color.r, gameOverText.color.g, gameOverText.color.b,0);
+
         playerMovement.enabled = true;
         gun.enabled = true;
     }
@@ -60,13 +66,28 @@ public class PlayerHealth : LivingEntity
 
     void RestartLevel()
     {
-        SceneManager.LoadScene("Main");
-        //Invoke("ReSpawn", 5f);
+        StartCoroutine(GameOverUI());   
     }
 
-    public void ReSpawn()
+    private IEnumerator GameOverUI()
     {
-        gameObject.SetActive(false);
-        gameObject.SetActive(true);
+        float alpha = 0f;
+        float maxAlpha = 1f;
+
+        while (alpha < maxAlpha)
+        {
+            alpha += Time.deltaTime;
+            gameOverImage.color = new Color(gameOverImage.color.r, gameOverImage.color.g, gameOverImage.color.b, alpha);
+            gameOverText.color = new Color(gameOverText.color.r, gameOverText.color.g, gameOverText.color.b, alpha);
+
+            yield return null;
+        }
+
+        Invoke("ReStart", 3f);
+    }
+
+    public void ReStart()
+    {
+        SceneManager.LoadScene("Main");
     }
 }

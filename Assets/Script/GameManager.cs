@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public int score = 0;
+    public Image option;
     public bool isGameOver { get; private set; }
-    
+    public AudioClip bgm;
+    private AudioSource audioSource;
 
     public static GameManager instance
     {
@@ -22,20 +25,37 @@ public class GameManager : MonoBehaviour
     }
 
     private static GameManager singletonInstance;
-    
-    public void Awake()
+
+    private void Awake()
     {
-        if(instance != null) 
+        if (instance != this) 
         {
             Destroy(gameObject);
         }
+    }
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = bgm;
+        audioSource.loop = true; // 반복 재생 설정
+        audioSource.Play(); // BGM 재생 시작
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            //옵션 창 띄우기
+            if(Time.timeScale == 0f)
+            {
+                option.gameObject.SetActive(false);
+                Time.timeScale = 1f;
+            }
+            else
+            {
+                option.gameObject.SetActive(true);
+                Time.timeScale = 0f;
+            }
         }
     }
 

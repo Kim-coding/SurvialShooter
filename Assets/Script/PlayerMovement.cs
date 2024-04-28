@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public CinemachineVirtualCamera TPSCamera;
     public CinemachineVirtualCamera FPSCamera;
     public GameObject MiniMap;
+    public GameObject wall;
 
     private bool isTpsCamera = true;
 
@@ -55,6 +56,7 @@ public class PlayerMovement : MonoBehaviour
         TPSCamera.gameObject.SetActive(isTpsCamera);
         FPSCamera.gameObject.SetActive(!isTpsCamera);
         MiniMap.SetActive(!isTpsCamera);
+        wall.SetActive(!isTpsCamera);
     }
 
     private void FixedUpdate()
